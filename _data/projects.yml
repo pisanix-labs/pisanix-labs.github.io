@@ -1,0 +1,6 @@
+- name: "go-eventbus-kafka"
+  url: "https://github.com/pisanix-labs/go-eventbus-kafka"
+  description: "Event-driven com Outbox Pattern no produtor HTTP para Kafka."
+- name: "istio-terraform"
+  url: "https://github.com/pisanix-labs/istio-terraform"
+  description: "POC de instalação/config do Istio via Terraform."

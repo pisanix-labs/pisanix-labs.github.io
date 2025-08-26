@@ -1,0 +1,18 @@
+title: Pisani — Portfólio
+description: SRE, Backend e Go. Artigos, projetos e talks.
+theme: minima
+lang: pt-BR
+minima:
+  skin: auto
+  social_links:
+    - { platform: github,  user_url: "https://github.com/pisanix" }
+    - { platform: linkedin, user_url: "https://www.linkedin.com/in/pisanix" }
+    - { platform: medium, user_url: "https://medium.com/@pisanix" }
+header_pages:
+  - articles.md
+  - projects.md
+  - talks.md
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+markdown: kramdown
