@@ -85,13 +85,18 @@ permalink: /
         <li>Istio e malha de serviço</li>
       </ul>
 
-      <div class="list">
+      <div class="grid videos">
         {% for t in site.data.talks %}
-        <a class="list-item" href="{{ t.url }}" target="_blank" rel="noopener">
-          <span class="list-title">{{ t.name }}</span>
-          <span class="list-text">{{ t.description }}</span>
-          <span class="list-cta">Ver</span>
-        </a>
+        <article class="video-card" data-url="{{ t.url }}">
+          <div class="video-thumb" role="button" aria-label="Reproduzir: {{ t.name }}">
+            <span class="badge provider">Video</span>
+            <span class="play" aria-hidden="true"></span>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">{{ t.name }}</h3>
+            <p class="video-text">{{ t.description }}</p>
+          </div>
+        </article>
         {% endfor %}
       </div>
     </div>
@@ -133,4 +138,57 @@ permalink: /
     })
   }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
   sections.forEach((s) => activeObserver.observe(s));
+
+  // Video previews (YouTube + fallback for LinkedIn)
+  function ytIdFromUrl(u) {
+    try {
+      const url = new URL(u);
+      if (url.hostname.includes('youtu')) {
+        if (url.searchParams.get('v')) return url.searchParams.get('v');
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (parts[0] === 'embed' || url.hostname === 'youtu.be') return parts.pop();
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  document.querySelectorAll('.video-card').forEach((card) => {
+    const href = card.getAttribute('data-url');
+    let provider = 'link';
+    let id = ytIdFromUrl(href);
+    const thumb = card.querySelector('.video-thumb');
+    const badge = thumb.querySelector('.badge');
+
+    try {
+      const url = new URL(href);
+      if (url.hostname.includes('youtu')) provider = 'youtube';
+      else if (url.hostname.includes('linkedin')) provider = 'linkedin';
+      else provider = url.hostname.replace('www.', '');
+    } catch (_) {}
+
+    if (provider === 'youtube' && id) {
+      thumb.style.backgroundImage = `url(https://i.ytimg.com/vi/${id}/hqdefault.jpg)`;
+      badge.textContent = 'YouTube';
+      thumb.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.width = '560';
+        iframe.height = '315';
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+        iframe.title = 'YouTube video player';
+        iframe.frameBorder = '0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        thumb.replaceWith(iframe);
+        card.classList.add('playing');
+      }, { once: true });
+    } else if (provider === 'linkedin') {
+      // Fallback preview (sem CORS para thumbnails). Usa estilo e abre nova aba.
+      badge.textContent = 'LinkedIn';
+      thumb.classList.add('linkedin');
+      thumb.addEventListener('click', () => window.open(href, '_blank'));
+    } else {
+      badge.textContent = provider;
+      thumb.addEventListener('click', () => window.open(href, '_blank'));
+    }
+  });
 </script>
