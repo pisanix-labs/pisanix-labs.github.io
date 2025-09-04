@@ -10,8 +10,27 @@ permalink: /
 <header class="hero" id="top">
   <div class="container">
     <div class="intro">
-      <h1 class="brand">Pisani</h1>
-      <p class="tagline">SRE, Backend e Go — confiabilidade, observabilidade e arquitetura de sistemas distribuídos.</p>
+      <h1 class="brand">Olá, eu sou o Pisani 👋</h1>
+      <p>
+        Sou Tech lead e Especialista em Backend e Frontend, com experiência em 
+        <strong>construção de sistemas web, observabilidade, cloud-native e práticas de engenharia confiáveis</strong>.
+      </p>
+      <p>
+        Tenho paixão por compartilhar conhecimento e já publiquei artigos técnicos no 
+        <a href="https://medium.com/@pisanix" target="_blank" rel="noopener">Medium</a>, 
+        além de manter projetos exemplo no 
+        <a href="https://github.com/pisanix-labs" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+      <p>🚀 Meus principais focos hoje:</p>
+      <ul>
+        <li>Backend em Go e Node.js</li>
+        <li>Kubernetes, Observabilidade e Cloud</li>
+        <li>Desenvolvimento de sistemas distribuídos</li>
+        <li>Engenharia de Confiabilidade de Sites (SRE)</li>
+      </ul>
+      <p>
+        Aqui você encontra meus projetos, artigos e experiências que refletem meu trabalho e minha forma de pensar engenharia de software.
+      </p>
     </div>
     <nav class="nav" aria-label="Seções do portfólio">
       <a class="nav-link" href="#artigos">Artigos</a>
@@ -77,14 +96,7 @@ permalink: /
     <div class="container">
       <header class="section-head">
         <h2>Palestras e workshops</h2>
-        <p>Tópicos práticos: SLIs/SLOs, observabilidade, Istio e arquitetura.</p>
       </header>
-      <ul class="bullets">
-        <li>SLIs, SLOs e Error Budgets na prática</li>
-        <li>Observabilidade de sistemas (RED, USE, Golden Signals)</li>
-        <li>Istio e malha de serviço</li>
-      </ul>
-
       <div class="grid videos">
         {% for t in site.data.talks %}
         <article class="video-card" data-url="{{ t.url }}">
@@ -102,6 +114,16 @@ permalink: /
     </div>
   </section>
 </main>
+
+<!-- Modal de vídeo -->
+<div class="modal" id="video-modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-label="Reprodutor de vídeo">
+    <button class="modal-close" data-close aria-label="Fechar">×</button>
+    <div class="modal-content"></div>
+  </div>
+  <div class="modal-gradient"></div>
+</div>
 
 <script>
   // Smooth scroll for internal links
@@ -152,6 +174,27 @@ permalink: /
     return null;
   }
 
+  // Modal helpers
+  const modal = document.getElementById('video-modal');
+  const modalContent = modal.querySelector('.modal-content');
+  const closeModal = () => {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('open');
+    document.body.classList.remove('modal-open');
+    modalContent.innerHTML = '';
+  };
+  const openModal = (node) => {
+    modalContent.innerHTML = '';
+    modalContent.appendChild(node);
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    modal.querySelector('.modal-close').focus({ preventScroll: true });
+  };
+  modal.addEventListener('click', (e) => { if (e.target.hasAttribute('data-close')) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // Video cards behavior
   document.querySelectorAll('.video-card').forEach((card) => {
     const href = card.getAttribute('data-url');
     let provider = 'link';
@@ -170,22 +213,28 @@ permalink: /
       thumb.style.backgroundImage = `url(https://i.ytimg.com/vi/${id}/hqdefault.jpg)`;
       badge.textContent = 'YouTube';
       thumb.addEventListener('click', () => {
+        const wrap = document.createElement('div');
+        wrap.className = 'modal-video';
         const iframe = document.createElement('iframe');
-        iframe.width = '560';
-        iframe.height = '315';
         iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
         iframe.title = 'YouTube video player';
-        iframe.frameBorder = '0';
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-        iframe.allowFullscreen = true;
-        thumb.replaceWith(iframe);
-        card.classList.add('playing');
-      }, { once: true });
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        wrap.appendChild(iframe);
+        openModal(wrap);
+      });
     } else if (provider === 'linkedin') {
-      // Fallback preview (sem CORS para thumbnails). Usa estilo e abre nova aba.
       badge.textContent = 'LinkedIn';
       thumb.classList.add('linkedin');
-      thumb.addEventListener('click', () => window.open(href, '_blank'));
+      thumb.addEventListener('click', () => {
+        const box = document.createElement('div');
+        box.className = 'modal-fallback linkedin';
+        box.innerHTML = `
+          <p>Este conteúdo é exibido no LinkedIn.</p>
+          <a class="btn" href="${href}" target="_blank" rel="noopener">Abrir no LinkedIn</a>
+        `;
+        openModal(box);
+      });
     } else {
       badge.textContent = provider;
       thumb.addEventListener('click', () => window.open(href, '_blank'));

@@ -210,5 +210,32 @@ body {
   background: color-mix(in oklab, var(--brand), var(--brand-2));
 }
 .video-thumb.linkedin { background: linear-gradient(135deg, #0a66c2, #1d9bf0); }
+.video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 .video-info .video-title { margin: 0 0 4px; font-size: 16px; }
 .video-info .video-text { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* ====== Modal ====== */
+body.modal-open { overflow: hidden; }
+.modal { position: fixed; inset: 0; z-index: 999; pointer-events: none; }
+.modal.open { pointer-events: auto; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.6); opacity: 0; transition: opacity .2s ease; }
+.modal.open .modal-backdrop { opacity: 1; }
+.modal-gradient { position: absolute; inset: auto 0 0 0; height: 120px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.4)); pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+.modal.open .modal-gradient { opacity: 1; }
+.modal-dialog {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.98);
+  width: min(960px, calc(100% - 32px));
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 14px; opacity: 0; transition: opacity .2s ease, transform .2s ease;
+}
+.modal.open .modal-dialog { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.modal-close { position: absolute; right: 10px; top: 8px; border: 0; background: transparent; color: var(--muted); font-size: 28px; line-height: 1; cursor: pointer; }
+.modal-close:hover { color: var(--text); }
+.modal-content { display: block; }
+.modal-video { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
+.modal-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.modal-fallback { display: grid; gap: 12px; align-content: center; justify-items: center; padding: 40px 10px; border-radius: 10px; border: 1px dashed var(--border); background: linear-gradient(135deg, var(--bg-alt), var(--card)); }
+.modal-fallback.linkedin { background: linear-gradient(135deg, #0a66c2, #1d9bf0); color: #fff; }
