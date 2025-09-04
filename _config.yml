@@ -8,10 +8,7 @@ minima:
     - { platform: github,  user_url: "https://github.com/pisanix" }
     - { platform: linkedin, user_url: "https://www.linkedin.com/in/pisanix" }
     - { platform: medium, user_url: "https://medium.com/@pisanix" }
-header_pages:
-  - articles.md
-  - projects.md
-  - talks.md
+header_pages: []
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

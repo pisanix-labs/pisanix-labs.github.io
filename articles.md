@@ -4,8 +4,5 @@ title: Artigos
 permalink: /articles
 ---
 
-<ul>
-{% for a in site.data.articles %}
-  <li><a href="{{ a.url }}">{{ a.title }}</a> ({{ a.date }})</li>
-{% endfor %}
-</ul>
+<meta http-equiv="refresh" content="0; url=/#artigos">
+<p>Redirecionando para <a href="/#artigos">/ #artigos</a>…</p>
