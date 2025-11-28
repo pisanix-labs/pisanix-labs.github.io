@@ -1,0 +1,74 @@
+# Prompt para Geração de CRUD Complexo
+
+Você é um Especialista em NestJS e TypeORM. Sua tarefa é gerar todo o código necessário para um módulo CRUD completo, baseado na definição de entidade fornecida abaixo.
+
+## 1. Definição da Entidade (Input)
+O usuário fornecerá a estrutura da entidade em formato TypeScript/JSON.
+**Analise cuidadosamente:**
+-   **Propriedades Primitivas**: (`string`, `number`, `boolean`, `Date`).
+-   **Relacionamentos**: (`OneToMany`, `ManyToOne`, `OneToOne`).
+-   **Entidades Filhas**: Itens que devem ser criados/atualizados junto com o pai (Cascade).
+
+## 2. Regras de Geração
+
+### A. Entidades e DTOs
+1.  **Entidade (`.entity.ts`)**:
+    -   Use decorators do TypeORM (`@Entity`, `@Column`, `@OneToMany`, etc.).
+    -   Para relacionamentos, use `cascade: true` se fizer sentido (ex: Itens de um Pedido).
+2.  **DTO de Criação (`create-x.dto.ts`)**:
+    -   Use `class-validator` para validação rigorosa.
+    -   Para entidades filhas, use `@ValidateNested()` e `@Type(() => ChildDto)`.
+    -   Documente tudo com `@ApiProperty()`.
+3.  **DTO de Atualização (`update-x.dto.ts`)**:
+    -   Estenda `PartialType(CreateXDto)`.
+
+### B. Camada de Dados (Repository)
+1.  **Interface (`x.repository.ts`)**: Defina os métodos padrão (`create`, `findAll`, `findOne`, `update`, `remove`).
+2.  **Implementação**: Crie a classe concreta usando `DataSource` ou `Repository` do TypeORM.
+
+### C. Camada de Serviço (Service)
+1.  Implemente a lógica de negócio.
+2.  Se houver entidades filhas, garanta que elas sejam salvas corretamente.
+3.  Lance `NotFoundException` se o ID não existir na busca/atualização.
+
+### D. Camada de Controle (Controller)
+1.  Exponha os endpoints REST padrão:
+    -   `POST /`
+    -   `GET /` (com paginação opcional)
+    -   `GET /:id`
+    -   `PATCH /:id`
+    -   `DELETE /:id`
+2.  Use decorators do Swagger (`@ApiOperation`, `@ApiResponse`) em todos os métodos.
+
+---
+
+## Modelo de Input (Copie e Preencha)
+
+Para gerar o código, por favor, forneça a definição da entidade no seguinte formato:
+
+```typescript
+// Exemplo: Entidade 'Project' com 'Tasks'
+Module: Projects
+
+Entity Project {
+  name: string;
+  description?: string; // Opcional
+  startDate: Date;
+  budget: number;
+  
+  // Relacionamento ManyToOne
+  manager: User; 
+  
+  // Relacionamento OneToMany (Filhos)
+  tasks: Task[];
+}
+
+Entity Task {
+  title: string;
+  isCompleted: boolean;
+}
+```
+
+---
+
+**Agora, aguardo a sua definição de entidade para gerar o código.**

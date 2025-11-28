@@ -95,6 +95,20 @@ body {
 .nav-link:hover { color: var(--text); background: rgba(255,255,255,.04); }
 .nav-link.active { color: var(--text); background: linear-gradient(90deg, rgba(79,140,255,.18), rgba(122,92,255,.18)); }
 
+.prompt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(79,140,255,.18), rgba(122,92,255,.26));
+  color: var(--text);
+}
+
 /* ====== Sections ====== */
 .section { padding: 56px 0; }
 .section.alt { background: var(--bg-alt); }
@@ -158,6 +172,8 @@ body {
 .list-title { font-weight: 600; }
 .list-text { color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
 .list-cta { font-weight: 600; color: var(--brand); }
+
+.prompt-card .list { margin-top: 14px; }
 
 .bullets { margin: 0 0 6px 0; padding-left: 18px; color: var(--muted); }
 .bullets li { margin: 2px 0; }

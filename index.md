@@ -36,6 +36,7 @@ permalink: /
       <a class="nav-link" href="#artigos">Artigos</a>
       <a class="nav-link" href="#projetos">Projetos</a>
       <a class="nav-link" href="#palestras">Palestras e workshops</a>
+      <a class="nav-link" href="#prompts">Prompts</a>
     </nav>
   </div>
   <div class="hero-bg"></div>
@@ -111,6 +112,43 @@ permalink: /
         </article>
         {% endfor %}
       </div>
+    </div>
+  </section>
+
+  <!-- Prompts -->
+  <section id="prompts" class="section alt reveal">
+    <div class="container">
+      <header class="section-head">
+        <h2>Prompts</h2>
+        <p>Prompts úteis que utilizo no meu dia a dia.</p>
+      </header>
+      {% assign prompt_files = site.static_files | where_exp: "file", "file.relative_path contains '/prompts/' and file.extname == '.md'" | sort: "relative_path" %}
+      {% if prompt_files.size > 0 %}
+      {% assign prompt_groups = prompt_files | group_by_exp: "file", "file.relative_path | remove_first: '/' | split: '/' | slice: 1, 1 | first" %}
+      <div class="grid cards">
+        {% for group in prompt_groups %}
+        <article class="card prompt-card">
+          <div class="card-body">
+            <p class="prompt-chip">{{ group.name | default: 'Diversos' }}</p>
+            <h3 class="card-title">Coleção {{ group.name | default: 'de prompts' }}</h3>
+            <p class="card-text">Abra o prompt em uma nova aba para copiar ou usar direto no seu fluxo.</p>
+            <div class="list">
+              {% for file in group.items %}
+              {% assign prompt_title = file.name | split: '.' | first | replace: '_', ' ' | replace: '-', ' ' | capitalize %}
+              <a class="list-item" href="{{ file.url }}" target="_blank" rel="noopener">
+                <span class="list-title">{{ prompt_title }}</span>
+                <span class="list-cta">Abrir</span>
+                <span class="list-text">{{ file.name }}</span>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="card-text">Nenhum prompt encontrado em <code>/prompts</code> ainda.</p>
+      {% endif %}
     </div>
   </section>
 </main>
