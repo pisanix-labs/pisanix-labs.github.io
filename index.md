@@ -122,29 +122,36 @@ permalink: /
         <h2>Prompts</h2>
         <p>Prompts úteis que utilizo no meu dia a dia.</p>
       </header>
-      {% assign prompt_files = site.static_files | where_exp: "file", "file.relative_path contains '/prompts/' and file.extname == '.md'" | sort: "relative_path" %}
-      {% if prompt_files.size > 0 %}
-      {% assign prompt_groups = prompt_files | group_by_exp: "file", "file.relative_path | remove_first: '/' | split: '/' | slice: 1, 1 | first" %}
+      {% assign prompt_files = site.static_files | sort: "relative_path" %}
+      {% capture has_prompts %}
+        {% for file in prompt_files %}
+          {% if file.relative_path contains '/prompts/' and file.extname == '.md' %}1{% break %}{% endif %}
+        {% endfor %}
+      {% endcapture %}
+      {% if has_prompts contains '1' %}
       <div class="grid cards">
-        {% for group in prompt_groups %}
         <article class="card prompt-card">
           <div class="card-body">
-            <p class="prompt-chip">{{ group.name | default: 'Diversos' }}</p>
-            <h3 class="card-title">Coleção {{ group.name | default: 'de prompts' }}</h3>
+            <p class="prompt-chip">Prompts</p>
+            <h3 class="card-title">Coleções</h3>
             <p class="card-text">Abra o prompt em uma nova aba para copiar ou usar direto no seu fluxo.</p>
             <div class="list">
-              {% for file in group.items %}
+              {% for file in prompt_files %}
+              {% if file.relative_path contains '/prompts/' and file.extname == '.md' %}
               {% assign prompt_title = file.name | split: '.' | first | replace: '_', ' ' | replace: '-', ' ' | capitalize %}
+              {% assign parts = file.relative_path | split: '/' %}
+              {% assign folder = parts[2] | default: 'prompts' %}
               <a class="list-item" href="{{ file.url }}" target="_blank" rel="noopener">
+                <span class="prompt-chip">{{ folder }}</span>
                 <span class="list-title">{{ prompt_title }}</span>
                 <span class="list-cta">Abrir</span>
                 <span class="list-text">{{ file.name }}</span>
               </a>
+              {% endif %}
               {% endfor %}
             </div>
           </div>
         </article>
-        {% endfor %}
       </div>
       {% else %}
       <p class="card-text">Nenhum prompt encontrado em <code>/prompts</code> ainda.</p>
