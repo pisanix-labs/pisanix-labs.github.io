@@ -40,35 +40,68 @@ O usuário fornecerá a estrutura da entidade em formato TypeScript/JSON.
     -   `DELETE /:id`
 2.  Use decorators do Swagger (`@ApiOperation`, `@ApiResponse`) em todos os métodos.
 
+## 3. Testes
+
+Crie testes unitários e de integração (quando houver) para todos os módulos gerados.
+Deixe evidente as validações de entrada e saída.
+Utilize estratégia de mock para não depender de banco de dados.
+
+## Atualização dos novos módulos no módulo raiz do projeto
+
+Atualize o arquivo `app.module.ts` para incluir os novos módulos.
+
 ---
 
 ## Modelo de Input (Copie e Preencha)
 
-Para gerar o código, por favor, forneça a definição da entidade no seguinte formato:
+Segue definição das entidades para geração dos CRUD:
 
 ```typescript
-// Exemplo: Entidade 'Project' com 'Tasks'
-Module: Projects
-
-Entity Project {
+Entity Customer {
   name: string;
-  description?: string; // Opcional
-  startDate: Date;
-  budget: number;
-  
-  // Relacionamento ManyToOne
-  manager: User; 
-  
-  // Relacionamento OneToMany (Filhos)
-  tasks: Task[];
+  email: string;
+  phone: string;
+  document: string;
+  vehicles: Vehicle[];
 }
 
-Entity Task {
-  title: string;
-  isCompleted: boolean;
+Entity Vehicle {
+    factory: string;
+    model: string;
+    year: number;
+    licensePlate: string;
+    customer: Customer;
 }
+
+Entity Service {
+    name: string;
+    price: number;
+}
+
+Entity Product {
+    name: string;
+    price: number;
+    stock: number;
+}
+
+Enum OrderStatus {
+    Recebida,
+    EmDiagnostico,
+    AguardandoAprovacao,
+    EmExecucao,
+    Finalizada,
+    Entregue
+}
+
+Entity Order {
+  customer: Customer;
+  vehicle: Vehicle;
+  services: Service[];
+  products: Product[];
+  totalPrice: number;
+  status: OrderStatus;
+}
+
 ```
 
 ---
-
-**Agora, aguardo a sua definição de entidade para gerar o código.**

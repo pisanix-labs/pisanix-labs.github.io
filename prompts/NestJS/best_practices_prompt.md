@@ -10,6 +10,11 @@ Copie todo esse conteúdo para os arquivos conforme IA utilizada.
 - cursor: .cursorrules
 - codex: AGENTS.md
 
+## Exclusão virtual
+
+- **Exclusão Virtual**: Utilize exclusão virtual (soft delete) para registros removidos.
+- **Timestamps**: Adicione campos `createdAt`, `updatedAt` e `deletedAt` para auditoria.
+
 ## 1. Arquitetura e Organização Modular
 - **Módulos de Funcionalidade**: Organize o código em módulos baseados em funcionalidades (ex: `products`, `users`, `orders`), não por camadas técnicas.
 - **Estrutura do Módulo**: Cada módulo deve conter seus próprios:

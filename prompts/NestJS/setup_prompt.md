@@ -113,6 +113,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
 ## 6. Configuração do TypeScript (Opcional mas Recomendado)
 Verifique se o `tsconfig.json` está com `strict: true` ou pelo menos `strictNullChecks: true` para garantir maior segurança de tipos.
 
+## 7. Data e hora
+No banco de dados iremos persistir em UTC, dessa forma, no módulo raiz inicialize a seguinte variável de ambiente
+```
+process.env.TZ = 'UTC';
+```
+
 ---
 **Resultado Esperado:**
 Ao final destes passos, devo ter uma aplicação rodando na porta 3000, com Swagger acessível em `/swagger`, validação de DTOs ativa e tratamento de erros padronizado.
