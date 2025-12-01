@@ -122,19 +122,18 @@ permalink: /
         <h2>Prompts</h2>
         <p>Prompts úteis que utilizo no meu dia a dia.</p>
       </header>
-      {% assign prompt_groups = site.data.prompts | default: [] %}
-      {% if prompt_groups.size > 0 %}
+      {% assign prompts = site.data.prompts | default: [] %}
+      {% if prompts.size > 0 %}
       <div class="grid cards">
-        {% for group in prompt_groups %}
         <article class="card prompt-card">
           <div class="card-body">
-            <p class="prompt-chip">{{ group.category }}</p>
-            <h3 class="card-title">{{ group.category }}</h3>
+            <p class="prompt-chip">Prompts</p>
+            <h3 class="card-title">Coleções</h3>
             <p class="card-text">Abra o prompt em uma nova aba para copiar ou usar direto no seu fluxo.</p>
             <div class="list">
-              {% for prompt in group.items %}
+              {% for prompt in prompts %}
               <a class="list-item" href="{{ prompt.reference }}" target="_blank" rel="noopener">
-                <span class="prompt-chip">{{ group.category }}</span>
+                <span class="prompt-chip">{{ prompt.stack }}</span>
                 <span class="list-title">{{ prompt.title }}</span>
                 <span class="list-cta">Abrir</span>
                 <span class="list-text">{{ prompt.reference | split: '/' | last }}</span>
@@ -143,7 +142,6 @@ permalink: /
             </div>
           </div>
         </article>
-        {% endfor %}
       </div>
       {% else %}
       <p class="card-text">Nenhum prompt encontrado em <code>/prompts</code> ainda.</p>
