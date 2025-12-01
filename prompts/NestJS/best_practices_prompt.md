@@ -74,6 +74,7 @@ Copie todo esse conteúdo para os arquivos conforme IA utilizada.
 ## 8. Testabilidade
 - O código deve ser desenhado para ser testável (injeção de dependência facilita mocks).
 - Services não devem depender de frameworks web (Request/Response do Express), apenas de DTOs e Entidades.
+- Os testes devem ser salvos em uma pasta exclusiva, na raiz /src/test, monte uma sub estrutura de pastas coerente que corresponda ao módulo que esta sendo testado.
 
 ---
 **Exemplo de fluxo de trabalho esperado:**
