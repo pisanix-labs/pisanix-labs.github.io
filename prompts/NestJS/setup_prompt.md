@@ -77,11 +77,13 @@ mkdir -p src/common/filters
 Crie o arquivo `src/common/filters/all-exceptions.filter.ts` com o seguinte conteúdo padrão (com tipagem estrita para Express):
 
 ```typescript
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger(AllExceptionsFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -89,14 +91,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const isHttp = exception instanceof HttpException;
     const status = isHttp ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-    
+
     let message: unknown = 'Internal server error';
-    if (isHttp) {
-        const payload = exception.getResponse();
-        message = (typeof payload === 'object' && payload !== null && 'message' in payload) 
-            ? (payload as any).message 
-            : exception.message;
+    if (exception instanceof HttpException) {
+      message = exception.message;
+      const response = exception.getResponse() as any;
+      if (response && response.message && Array.isArray(response.message) && response.message.length) {
+        message += ': ' + response.message.join('; ');
+      }
+    } else {
+      message = (exception as Error).message;
     }
+    this.logger.error(`Http Status: ${status} Error Message: ${JSON.stringify(message)}`);
+    this.logger.error(`stack: ${JSON.stringify((exception as Error).stack)}`)
 
     response.status(status).json({
       statusCode: status,
